@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% block title %}Appexil CMS{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">A</span><span>Appexil CMS</span></div>
+  <a class="iconbtn" href="{{ url_for('settings') }}" title="Settings">&#9881;</a>
+</header>
+
+{% with msgs = get_flashed_messages(with_categories=true) %}
+{% if msgs %}<div class="flashwrap">{% for cat,m in msgs %}<div class="flash {{cat}}">{{m}}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+
+<main class="wrap">
+{% block content %}{% endblock %}
+</main>
+
+<nav class="bottomnav">
+  <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.path=='/' else '' }}"><span class="ic">&#9638;</span><span>Home</span></a>
+  <a href="{{ url_for('clients') }}" class="{{ 'active' if request.path.startswith('/clients') else '' }}"><span class="ic">&#9787;</span><span>Clients</span></a>
+  <a href="{{ url_for('invoices') }}" class="{{ 'active' if request.path.startswith('/invoices') else '' }}"><span class="ic">&#9673;</span><span>Invoices</span></a>
+  <a href="{{ url_for('expenses') }}" class="{{ 'active' if request.path.startswith('/expenses') else '' }}"><span class="ic">&#9660;</span><span>Expenses</span></a>
+</nav>
+</body>
+</html>

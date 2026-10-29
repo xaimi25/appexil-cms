@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ inv['inv_no'] }} · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">{{ inv['inv_no'] }}</h1>
+<p><span class="pill {{ 'paid' if inv['status']=='Paid' else 'due' }}">{{ inv['status'] }}</span></p>
+
+<div class="detailbox">
+  <div><b>Client:</b> {{ inv['name'] }} ({{ inv['app_id'] }})</div>
+  <div><b>Date:</b> {{ inv['issue_date'] }}</div>
+  <div><b>Amount:</b> <span class="mono">{{ money(inv['amount'], inv['currency']) }}</span></div>
+  <div><b>Payment type:</b> {{ inv['pay_type'] or '—' }}</div>
+  {% if inv['paid_date'] %}<div><b>Paid on:</b> {{ inv['paid_date'] }}</div>{% endif %}
+</div>
+
+<h2 class="sectitle">Bank details (auto: {{ inv['currency'] }})</h2>
+<pre class="bankbox">{{ bank }}</pre>
+
+<div class="btnrow">
+  <a class="btn primary" href="{{ url_for('invoice_pdf', iid=inv['id']) }}">Download PDF</a>
+  {% if inv['status'] != 'Paid' %}
+  <form method="post" action="{{ url_for('invoice_pay', iid=inv['id']) }}" style="display:inline">
+    <input type="hidden" name="paid_date" value="{{ today }}">
+    <button class="btn ok" type="submit">Mark as Paid</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

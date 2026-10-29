@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Login · Appexil CMS{% endblock %}
+{% block content %}
+<div class="logincard">
+  <div class="brand big"><span class="brand-mark">A</span></div>
+  <h1 class="pagetitle">Appexil CMS</h1>
+  <p class="muted">Enter your PIN to continue</p>
+  <form method="post" class="form">
+    <label><input name="pin" type="password" inputmode="numeric" autofocus placeholder="PIN"></label>
+    <button class="btn primary" type="submit">Unlock</button>
+  </form>
+</div>
+{% endblock %}

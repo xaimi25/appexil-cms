@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">Dashboard</h1>
+<p class="muted">AUD &rarr; PKR rate: <b>{{ rate|int }}</b> · <a href="{{ url_for('settings') }}">change</a></p>
+
+<div class="cards3">
+  <div class="statcard"><div class="slabel">Total Revenue</div><div class="sval green">Rs {{ "{:,.0f}".format(revenue) }}</div><div class="ssub">paid invoices only</div></div>
+  <div class="statcard"><div class="slabel">Total Expenses</div><div class="sval red">Rs {{ "{:,.0f}".format(expenses) }}</div><div class="ssub">all recorded</div></div>
+  <div class="statcard hero"><div class="slabel">Net Profit</div><div class="sval navy">Rs {{ "{:,.0f}".format(profit) }}</div><div class="ssub">revenue &minus; expenses</div></div>
+</div>
+
+<div class="row2">
+  <div class="statcard sm"><div class="slabel">Clients</div><div class="sval">{{ n_clients }}</div></div>
+  <div class="statcard sm"><div class="slabel">Unpaid (PKR)</div><div class="sval amber">Rs {{ "{:,.0f}".format(unpaid_pkr) }}</div></div>
+  <div class="statcard sm"><div class="slabel">Unpaid (AUD)</div><div class="sval amber">{{ "{:,.0f}".format(unpaid_aud) }} AUD</div></div>
+</div>
+
+<h2 class="sectitle">Recent invoices</h2>
+{% for i in recent_inv %}
+<a class="rowcard" href="{{ url_for('invoice_detail', iid=i['id']) }}">
+  <div><b>{{ i['inv_no'] }}</b> · {{ i['name'] }}<div class="muted sm">{{ i['issue_date'] }}</div></div>
+  <div class="right"><div class="mono">{{ money(i['amount'], i['currency']) }}</div><span class="pill {{ 'paid' if i['status']=='Paid' else 'due' }}">{{ i['status'] }}</span></div>
+</a>
+{% else %}<p class="muted">No invoices yet.</p>{% endfor %}
+
+<h2 class="sectitle">Recent expenses</h2>
+{% for e in recent_exp %}
+<div class="rowcard"><div><b>{{ e['title'] }}</b><div class="muted sm">{{ e['exp_date'] }} · {{ e['category'] }}</div></div>
+<div class="right"><div class="mono red">Rs {{ "{:,.0f}".format(e['amount']) }}</div></div></div>
+{% else %}<p class="muted">No expenses yet.</p>{% endfor %}
+{% endblock %}

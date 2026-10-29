@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Agreement · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">Service Agreement</h1>
+<p class="muted">Client: <b>{{ c['name'] }}</b> ({{ c['app_id'] }}) · CNIC {{ c['cnic'] or '—' }}</p>
+<p>Edit the payment amounts if needed, then generate the PDF. The file saves as <span class="mono">Agreement_[ClientName].pdf</span>.</p>
+<form method="post" class="form card">
+  <label>Total fee (AUD)<input type="number" step="1" min="0" name="total_fee" value="{{ total }}" required></label>
+  <label>1st instalment (AUD)<input type="number" step="1" min="0" name="inst1" value="{{ inst1 }}" required></label>
+  <label>2nd instalment (AUD)<input type="number" step="1" min="0" name="inst2" value="{{ inst2 }}" required></label>
+  <button class="btn primary" type="submit">Generate Agreement PDF</button>
+  <a class="btn" href="{{ url_for('client_detail', cid=c['id']) }}">Cancel</a>
+</form>
+{% endblock %}

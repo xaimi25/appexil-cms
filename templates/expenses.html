@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Expenses · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">Expenses</h1>
+<p class="muted">Total: <b class="mono red">Rs {{ "{:,.0f}".format(total) }}</b></p>
+
+<form method="post" class="form card">
+  <h2 class="sectitle" style="margin-top:0">Add expense</h2>
+  <label>Title *<input name="title" required placeholder="e.g. FBR Tax Filing"></label>
+  <div class="row2f">
+    <label>Amount (PKR) *<input type="number" step="0.01" min="0" name="amount" required></label>
+    <label>Date<input type="date" name="exp_date" value="{{ today }}"></label>
+  </div>
+  <label>Category<select name="category">{% for c in cats %}<option>{{ c }}</option>{% endfor %}</select></label>
+  <button class="btn primary" type="submit">Add Expense</button>
+</form>
+
+<h2 class="sectitle">All expenses</h2>
+{% for e in expenses %}
+<div class="rowcard">
+  <div><b>{{ e['title'] }}</b><div class="muted sm">{{ e['exp_date'] }} · {{ e['category'] }}</div></div>
+  <div class="right"><div class="mono red">Rs {{ "{:,.0f}".format(e['amount']) }}</div>
+  <form method="post" action="{{ url_for('expense_delete', eid=e['id']) }}" onsubmit="return confirm('Delete this expense?')"><button class="linkbtn" type="submit">delete</button></form></div>
+</div>
+{% else %}<p class="muted">No expenses yet.</p>{% endfor %}
+{% endblock %}

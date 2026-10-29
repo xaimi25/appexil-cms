@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Settings · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">Settings</h1>
+<form method="post" class="form">
+  <h2 class="sectitle">Exchange rate</h2>
+  <label>AUD &rarr; PKR rate<input type="number" step="0.01" min="0" name="aud_to_pkr_rate" value="{{ vals['aud_to_pkr_rate'] }}"></label>
+
+  <h2 class="sectitle">Default agreement fees (AUD)</h2>
+  <div class="row2f">
+    <label>Total fee<input type="number" step="1" name="default_total_fee" value="{{ vals['default_total_fee'] }}"></label>
+    <label>1st instalment<input type="number" step="1" name="default_inst1" value="{{ vals['default_inst1'] }}"></label>
+    <label>2nd instalment<input type="number" step="1" name="default_inst2" value="{{ vals['default_inst2'] }}"></label>
+  </div>
+
+  <h2 class="sectitle">Bank details — PKR invoices</h2>
+  <label><textarea name="bank_pkr" rows="4">{{ vals['bank_pkr'] }}</textarea></label>
+
+  <h2 class="sectitle">Bank details — AUD invoices</h2>
+  <label><textarea name="bank_aud" rows="4">{{ vals['bank_aud'] }}</textarea></label>
+
+  <h2 class="sectitle">Company</h2>
+  <label>Name<input name="company_name" value="{{ vals['company_name'] }}"></label>
+  <label>Website<input name="company_website" value="{{ vals['company_website'] }}"></label>
+  <label>Email<input name="company_email" value="{{ vals['company_email'] }}"></label>
+
+  <h2 class="sectitle">App lock (optional)</h2>
+  <label>PIN (empty = no lock)<input name="app_pin" type="password" value="{{ vals['app_pin'] }}" placeholder="e.g. 1234"></label>
+
+  <button class="btn primary" type="submit">Save Settings</button>
+</form>
+{% endblock %}

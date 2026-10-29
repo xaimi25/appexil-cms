@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ c['name'] }} · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">{{ c['name'] }}</h1>
+<p class="mono muted">{{ c['app_id'] }} · {{ c['status'] }}</p>
+
+<div class="detailbox">
+  <div><b>CNIC/Passport:</b> {{ c['cnic'] or '—' }}</div>
+  <div><b>Phone:</b> {{ c['phone'] or '—' }}</div>
+  <div><b>Email:</b> {{ c['email'] or '—' }}</div>
+  <div><b>Service:</b> {{ c['service_type'] or '—' }}</div>
+  <div><b>Since:</b> {{ c['created_at'] }}</div>
+</div>
+
+<div class="btnrow">
+  <a class="btn" href="{{ url_for('client_edit', cid=c['id']) }}">Edit</a>
+  <a class="btn" href="{{ url_for('invoice_new', client_id=c['id']) }}">+ Invoice</a>
+  <a class="btn primary" href="{{ url_for('agreement', cid=c['id']) }}">Generate Agreement</a>
+</div>
+{% if wa_num %}
+<div class="btnrow">
+  <a class="btn wa" target="_blank" href="https://wa.me/{{ wa_num }}?text={{ ('Dear ' ~ c['name'] ~ ', please find attached your Service Agreement from Appexil Visa Consultant.')|urlencode }}">Send via WhatsApp</a>
+</div>
+{% endif %}
+
+<h2 class="sectitle">Invoices</h2>
+{% for i in invoices %}
+<a class="rowcard" href="{{ url_for('invoice_detail', iid=i['id']) }}">
+  <div><b>{{ i['inv_no'] }}</b> · {{ i['pay_type'] or '' }}<div class="muted sm">{{ i['issue_date'] }}</div></div>
+  <div class="right"><div class="mono">{{ money(i['amount'], i['currency']) }}</div><span class="pill {{ 'paid' if i['status']=='Paid' else 'due' }}">{{ i['status'] }}</span></div>
+</a>
+{% else %}<p class="muted">No invoices for this client yet.</p>{% endfor %}
+
+<form method="post" action="{{ url_for('client_delete', cid=c['id']) }}" onsubmit="return confirm('Delete this client and their invoices?')">
+  <button class="btn danger" type="submit">Delete client</button>
+</form>
+{% endblock %}

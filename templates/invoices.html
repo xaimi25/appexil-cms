@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Invoices · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">Invoices</h1>
+{% for i in invoices %}
+<a class="rowcard" href="{{ url_for('invoice_detail', iid=i['id']) }}">
+  <div><b>{{ i['inv_no'] }}</b> · {{ i['name'] }}<div class="muted sm">{{ i['app_id'] }} · {{ i['issue_date'] }}</div></div>
+  <div class="right"><div class="mono">{{ money(i['amount'], i['currency']) }}</div><span class="pill {{ 'paid' if i['status']=='Paid' else 'due' }}">{{ i['status'] }}</span></div>
+</a>
+{% else %}<p class="muted">No invoices yet.</p>{% endfor %}
+<a class="fab" href="{{ url_for('invoice_new') }}">+ New Invoice</a>
+{% endblock %}

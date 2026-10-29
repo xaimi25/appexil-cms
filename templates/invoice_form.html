@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}New Invoice · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">New Invoice</h1>
+<form method="post" class="form">
+  <label>Client *<select name="client_id" required>{% for c in clients %}<option value="{{ c['id'] }}" {{ 'selected' if preselect and preselect|int == c['id'] else '' }}>{{ c['name'] }} ({{ c['app_id'] }})</option>{% endfor %}</select></label>
+  <label>Date of issue<input type="date" name="issue_date" value="{{ today }}"></label>
+  <label>Amount *<input type="number" step="0.01" min="0" name="amount" required></label>
+  <label>Currency *<select name="currency"><option value="AUD">AUD</option><option value="PKR">PKR</option></select></label>
+  <label>Payment type<select name="pay_type">{% for p in pay_types %}<option>{{ p }}</option>{% endfor %}</select></label>
+  <button class="btn primary" type="submit">Create Invoice</button>
+  <a class="btn" href="{{ url_for('invoices') }}">Cancel</a>
+</form>
+{% endblock %}

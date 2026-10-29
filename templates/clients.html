@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Clients · Appexil CMS{% endblock %}
+{% block content %}
+<h1 class="pagetitle">Clients</h1>
+<form class="searchbar" method="get">
+  <input type="search" name="q" placeholder="Search name, ID, CNIC, phone…" value="{{ q }}">
+  <button class="btn" type="submit">Search</button>
+</form>
+
+{% for c in clients %}
+{% set due = (c['due_pkr'] or 0) + (c['due_aud'] or 0) %}
+<div class="clientcard">
+  <div class="cc-top">
+    <div class="avatar">{{ c['name'][:1]|upper }}</div>
+    <div class="cc-id"><b>{{ c['name'] }}</b><div class="mono muted sm">{{ c['app_id'] }}</div></div>
+    <span class="pill {{ 'paid' if c['status']=='Completed' else ('due' if c['status'] in ['Assessment Lodged','Documents Pending'] else 'info') }}">{{ c['status'] }}</span>
+  </div>
+  <div class="cc-meta">
+    <div>{{ c['service_type'] or '—' }}</div>
+    <div class="muted sm">{{ c['phone'] or '' }}</div>
+  </div>
+  <div class="cc-foot">
+    <div class="due">Balance due<br>
+      {% if due == 0 %}<b class="green">0 (Paid)</b>
+      {% else %}<b class="amber">{{ money(c['due_aud'] or 0, 'AUD') if (c['due_aud'] or 0) >= (c['due_pkr'] or 0) else money(c['due_pkr'] or 0, 'PKR') }}</b>{% endif %}
+    </div>
+    <div class="cc-actions">
+      <a class="btn sm" href="{{ url_for('client_detail', cid=c['id']) }}">Open</a>
+    </div>
+  </div>
+</div>
+{% else %}<p class="muted">No clients found.</p>{% endfor %}
+
+<a class="fab" href="{{ url_for('client_new') }}">+ Add Client</a>
+{% endblock %}
